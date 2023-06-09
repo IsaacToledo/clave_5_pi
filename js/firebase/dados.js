@@ -16,7 +16,7 @@
 'use strict' //modo estrito
 
 /**
- * obtemDados.
+ * obtemDados.  
  * Obtem dados da collection a partir do Firebase.
  * @param {string} collection - Nome da collection no Firebase
  * @return {object} - Uma tabela com os dados obtidos
@@ -62,8 +62,8 @@ async function obtemDados(collection) {
             novaLinha.insertCell().textContent = new Intl.NumberFormat('pt-BR', { style: 'decimal' }).format(item.val().ins_2)
             novaLinha.insertCell().textContent = new Intl.NumberFormat('pt-BR', { style: 'decimal' }).format(item.val().ins_3)
             novaLinha.insertCell().textContent = new Intl.NumberFormat('pt-BR', { style: 'decimal' }).format(item.val().ins_4)
-            novaLinha.insertCell().innerHTML = `<button class='btn btn-sm btn-danger' onclick=remover('${db}','${id}')><i class="bi bi-trash"></i></button>
-      <button class='btn btn-sm btn-warning' onclick=carregaDadosAlteracao('${db}','${id}')><i class="bi bi-pencil-square"></i></button>`
+            novaLinha.insertCell().innerHTML = `<button class='btn btn-sm btn-warning' onclick=carregaDadosAlteracao('${db}','${id}')><i class="bi bi-pencil-square"></i></button>
+<button class='btn btn-sm btn-danger' onclick=remover('${db}','${id}')><i class="bi bi-trash"></i></button>`
 
         })
         let rodape = tabela.insertRow()
@@ -83,26 +83,35 @@ async function obtemDados(collection) {
  * @return {object} - Os dados do registro serão vinculados aos inputs do formulário.
  */
 
+
 async function carregaDadosAlteracao(db, id) {
+
     await firebase.database().ref(db + '/' + id).on('value', (snapshot) => {
         document.getElementById('id').value = id
         document.getElementById('nome').value = snapshot.val().nome
         document.getElementById('nascimento').value = snapshot.val().nascimento
         document.getElementById('cpf').value = snapshot.val().cpf
         document.getElementById('email').value = snapshot.val().email
-        document.getElementById('telefone').value = snapshot.val().email
+        document.getElementById('telefone').value = snapshot.val().telefone
         document.getElementById('cep').value = snapshot.val().cep
+        document.getElementById('ins_0').value = snapshot.val().ins_0
+        document.getElementById('ins_1').value = snapshot.val().ins_1
+        document.getElementById('ins_2').value = snapshot.val().ins_2
+        document.getElementById('ins_3').value = snapshot.val().ins_3
+        document.getElementById('ins_4').value = snapshot.val().ins_4
 
-        if (snapshot.val().sexo === 'Masculino') {
-            document.getElementById('sexoM').checked = true
+        if (snapshot.val().sexo === 'M') {
+            document.getElementById('sexo-0').checked = true
+        } else if (snapshot.val().sexo === 'F') {
+            document.getElementById('sexo-1').checked = true
         } else {
-            document.getElementById('sexoF').checked = true
+            document.getElementById('sexo-2').checked = true
         }
 
-        if (snapshot.val().envio === 'Entregar') {
-            document.getElementById('envio-1').select = true
+        if (snapshot.val().formadeenvio === 'Entregar') {
+            document.getElementById('envio_1').selected = true
         } else {
-            document.getElementById('envio-2').select = true
+            document.getElementById('envio_2').selected = true
         }
     })
 
@@ -122,16 +131,7 @@ async function carregaDadosAlteracao(db, id) {
 function salvar(event, collection) {
     event.preventDefault() // evita que o formulário seja recarregado
         //Verifica os campos obrigatórios
-    if (document.getElementById('nome').value === '') { alerta('⚠️É obrigatório informar o nome!', 'warning') } 
-    else if (document.getElementById('nascimento').value === '') { alerta('⚠️É obrigatório informar o nascimento!', 'warning') } 
-    else if (document.getElementById('cpf').value === '') { alerta('⚠️É obrigatório informar o CPF!', 'warning') } 
-    else if (document.getElementById('email').value === '') { alerta('⚠️É obrigatório informar o email!', 'warning') } 
-    else if (document.getElementById('telefone').value === '') { alerta('⚠️É obrigatório informar o telefone!', 'warning') } 
-    else if (document.getElementById('formadeenvio').value === 'Selecione...') { alerta('⚠️É obrigatório informar uma forma de envio!', 'warning') } 
-    else if (document.getElementById('cep').value === '') { alerta('⚠️É obrigatório informar o CEP!', 'warning') } 
-    else if (document.getElementById('ins_0').value === 0 && document.getElementById('ins_1').value === 0 && document.getElementById('ins_2').value === 0 && document.getElementById('ins_3').value === 0 && document.getElementById('ins_4').value === 0) { alerta('⚠️Deve-se indicar pelo menos 1 instrumento a se comprar!', 'warning') } 
-    else if (document.getElementById('id').value !== '') { alterar(event, collection) } 
-    else { incluir(event, collection) }
+    if (document.getElementById('nome').value === '') { alerta('⚠️É obrigatório informar o nome!', 'warning') } else if (document.getElementById('nascimento').value === '') { alerta('⚠️É obrigatório informar o nascimento!', 'warning') } else if (document.getElementById('cpf').value === '') { alerta('⚠️É obrigatório informar o CPF!', 'warning') } else if (document.getElementById('email').value === '') { alerta('⚠️É obrigatório informar o email!', 'warning') } else if (document.getElementById('telefone').value === '') { alerta('⚠️É obrigatório informar o telefone!', 'warning') } else if (document.getElementById('formadeenvio').value === '') { alerta('⚠️É obrigatório informar uma forma de envio!', 'warning') } else if (document.getElementById('cep').value === '') { alerta('⚠️É obrigatório informar o CEP!', 'warning') } else if (document.getElementById('ins_0').value == 0 && document.getElementById('ins_1').value == 0 && document.getElementById('ins_2').value == 0 && document.getElementById('ins_3').value == 0 && document.getElementById('ins_4').value == 0) { alerta('⚠️Deve-se indicar pelo menos 1 instrumento a se comprar!', 'warning') } else if (document.getElementById('ins_0').value < 0 || document.getElementById('ins_1').value < 0 || document.getElementById('ins_2').value < 0 || document.getElementById('ins_3').value < 0 || document.getElementById('ins_4').value < 0) { alerta('⚠️Quantidade de instrumento não pode ser negativa!', 'warning') } else if (document.getElementById('id').value !== '') { alterar(event, collection) } else { incluir(event, collection) }
 }
 
 
@@ -263,7 +263,7 @@ function totalRegistros(collection) {
         if (snap.numChildren() === 0) {
             retorno = '⚠️ Ainda não há nenhum registro cadastrado!'
         } else {
-            retorno = `Total: <span class="badge fundo-laranja-escuro"> ${snap.numChildren()} </span>`
+            retorno = `Total: <span class="badge fundo-verde-firebase"> ${snap.numChildren()} </span>`
         }
     })
     return retorno

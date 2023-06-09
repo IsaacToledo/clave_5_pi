@@ -40,25 +40,25 @@
         <div class="card-body my-2">
             <form id="formNovoUsuario">
                 <div class="form-group mt-2">
+                    <center>
+                        <label for="email">E-mail</label>
+                        <input type="email" class="form-control" placeholder="E-mail do usuário" id="emailNovo" required autofocus>
+                </div>
+                </center>
                 <center>
-                    <label for="email">E-mail</label>
-                    <input type="email" class="form-control" placeholder="E-mail do usuário" id="emailNovo" required autofocus>
-                </div>
-            </center>
-            <center>
-                <div class="form-group mt-2">
-                    <label for="senha">Senha</label>
-                    <input type="password" class="form-control" placeholder="Senha do usuário" id="senhaNovo" required>
-                </div>
-                <div class="d-grid gap-2 my-2">
-                    <button type="submit" class="btn btn-success me-2 p-2" title="Crie um novo usuário informando o email e senha">
+                    <div class="form-group mt-2">
+                        <label for="senha">Senha</label>
+                        <input type="password" class="form-control" placeholder="Senha do usuário" id="senhaNovo" required>
+                    </div>
+                    <div class="d-grid gap-2 my-2">
+                        <button type="submit" class="btn btn-success me-2 p-2" title="Crie um novo usuário informando o email e senha">
                         <i class="bi bi-person-circle"></i> Novo Usuário </button>
-                </div>
-            </center>
+                    </div>
+                </center>
             </form>
             <a href="index.html">Deseja efetuar o login?</a>
         </div>
-        <div id="mensagemAlerta"></div>
+        <div id="msgAlerta"></div>
     </div>
     <!-- Carregando os scripts do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
